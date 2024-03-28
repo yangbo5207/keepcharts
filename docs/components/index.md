@@ -113,3 +113,14 @@ const App = () => {
 
 export default App
 ```
+
+Rect 支持的属性如下
+
+| name         | description | type      | default |
+| :----------- | :---------- | :-------- | :------ |
+| x            | 左上角 x坐标  | ?: number | 0       |
+| y            | 左上角 y坐标  | ?: number | 0       |
+| width        | 宽          | ?: number | 100     |
+| height       | 高          | ?: number | 100     |
+| fillStyle    | 填充颜色     | ?: string | black   |
+| cornerRadius | 圆角        | ?: number | 0       |

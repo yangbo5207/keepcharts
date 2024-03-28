@@ -101,3 +101,12 @@ const App = () => {
 
 export default App
 ```
+
+Line 支持的属性如下
+
+| name        | description | type                        | default            |
+| :---------- | :---------- | :-------------------------- | :----------------- |
+| start       | 起点坐标    | ?: { x: number, y: number } | { x: 0, y: 0 }     |
+| end         | 终点坐标    | ?: { x: number, y: number } | { x: 100, y: 100 } |
+| strokeStyle | 描边颜色    | ?: string                   | black              |
+| lineWidth   | 描边宽度    | ?: number                   | 1                  |

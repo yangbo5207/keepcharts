@@ -67,7 +67,7 @@ export default App
 
 ```tsx | pure
 import { useState } from 'openinula'
-import { Line, Stage } from 'inula-charts'
+import { Stage, Curve } from 'inula-charts'
 
 const App = () => {
   const [startX, setStartX] = useState(100)
@@ -99,13 +99,7 @@ const App = () => {
       </div>
 
       <Stage>
-        <Line
-          points={[startX, startY, 200, 200, endX, endY]}
-          smooth={true}
-          draggable
-          lineWidth={2}
-          strokeStyle="blue"
-        />
+        <Curve points={[startX, startY, 200, 200, endX, endY]} draggable lineWidth={2} strokeStyle="blue" />
       </Stage>
     </>
   )
@@ -113,3 +107,11 @@ const App = () => {
 
 export default App
 ```
+
+Curve 支持的属性如下
+
+| name        | description | type        | default                        |
+| :---------- | :---------- | :---------- | :----------------------------- |
+| points      | 点的数组    | ?: [x1, y1, x2, y2, x3, y3, x4, y4, ...] | [100, 100, 200, 200, 300, 150] |
+| strokeStyle | 填充颜色    | ?: string   | black                          |
+

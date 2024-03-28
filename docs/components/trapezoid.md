@@ -116,3 +116,15 @@ const App = () => {
 
 export default App
 ```
+
+Trapezoid 支持的属性如下
+
+| name        | description   | type      | default |
+| :---------- | :------------ | :-------- | :------ |
+| x           | 左上角 x 坐标 | ?: number | 0       |
+| y           | 左上角 y 坐标 | ?: number | 0       |
+| width       | 宽            | ?: number | 100     |
+| height      | 高            | ?: number | 100     |
+| fillStyle   | 填充颜色      | ?: string | black   |
+| shortLength | 短边长度      | ?: number | 80      |
+

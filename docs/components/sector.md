@@ -102,3 +102,14 @@ const App = () => {
 
 export default App
 ```
+
+Sector 支持的属性如下
+
+| name       | description | type      | default |
+| :--------- | :---------- | :-------- | :------ |
+| x          | 圆心坐标    | ?: number | 10      |
+| y          | 圆心坐标    | ?: number | 10      |
+| radius     | 半径        | ?: number | 8       |
+| fillStyle  | 填充颜色    | ?: string | black   |
+| startAngle | 开始角度    | ?: number | 30      |
+| endAngle   | 结束角度    | ?: number | 90      |
