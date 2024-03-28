@@ -18,7 +18,7 @@ order: 5
  * inline: true
  */
 import { useState } from 'react'
-import { Line, Stage } from 'inula-charts'
+import { Stage, Curve } from 'inula-charts'
 
 const App = () => {
   const [startX, setStartX] = useState(100)
@@ -50,13 +50,7 @@ const App = () => {
       </div>
 
       <Stage>
-        <Line
-          points={[startX, startY, 200, 200, endX, endY]}
-          smooth={true}
-          draggable
-          lineWidth={2}
-          strokeStyle="blue"
-        />
+        <Curve points={[startX, startY, 200, 200, endX, endY]} draggable lineWidth={2} strokeStyle="blue" />
       </Stage>
     </>
   )

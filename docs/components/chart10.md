@@ -25,7 +25,6 @@ const App = () => {
     },
     series: [
       {
-        type: 'bar',
         showBackground: true,
         data: [190, 210, 300, 450]
       }

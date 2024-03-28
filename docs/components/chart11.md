@@ -26,7 +26,6 @@ const App = () => {
     },
     series: [
       {
-        type: 'pie',
         data: [
           { value: 1, name: 'pie-1' },
           { value: 2, name: 'pie-2' },

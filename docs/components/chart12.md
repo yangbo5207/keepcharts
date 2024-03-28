@@ -26,7 +26,6 @@ const App = () => {
     },
     series: [
       {
-        type: 'pie',
         radius: ['40%', '70%'],
         data: [
           { value: 1, name: 'pie-1' },

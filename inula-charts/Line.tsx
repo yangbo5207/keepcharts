@@ -12,8 +12,8 @@ const defaultProps: LineProps = {
 }
 
 export type LineProps = _Line['data'] & {
-  start: { x: number; y: number }
-  end: { x: number; y: number }
+  start?: { x: number; y: number }
+  end?: { x: number; y: number }
 }
 
 export const Line = forwardRef<_Line, LineProps & AnimationConfig>((props, ref) => {

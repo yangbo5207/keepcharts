@@ -11,6 +11,7 @@ export * from './Trapezoid'
 
 export * from './DraggableLine'
 export * from './Sector'
+export * from './Curve'
 
 export * from './LineChart'
 export * from './KLineChart'

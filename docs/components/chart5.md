@@ -27,7 +27,6 @@ const App = () => {
     series: [
       {
         name: 'Email',
-        type: 'line',
         stack: 'sign',
         areaStyle: {},
         data: [120, 132, 101, 134, 90, 230, 210],
@@ -35,7 +34,6 @@ const App = () => {
       },
       {
         name: 'Union Ads',
-        type: 'line',
         stack: 'sign',
         areaStyle: {},
         data: [220, 182, 191, 234, 290, 330, 310],
@@ -43,7 +41,6 @@ const App = () => {
       },
       {
         name: 'Video Ads',
-        type: 'line',
         stack: 'sign',
         areaStyle: {},
         data: [150, 232, 201, 154, 190, 330, 410],
@@ -51,7 +48,6 @@ const App = () => {
       },
       {
         name: 'Direct',
-        type: 'line',
         stack: 'sign',
         areaStyle: {},
         data: [320, 332, 301, 334, 390, 330, 320],
@@ -59,7 +55,6 @@ const App = () => {
       },
       {
         name: 'Search Engine',
-        type: 'line',
         stack: 'sign',
         areaStyle: {},
         data: [400, 600, 800, 700, 400, 500, 300],

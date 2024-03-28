@@ -25,7 +25,6 @@ const App = () => {
     },
     series: [
       {
-        type: 'candlestick',
         data: [
           [20, 34, 10, 38],
           [40, 35, 30, 50],

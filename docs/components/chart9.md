@@ -25,7 +25,6 @@ const App = () => {
     },
     series: [
       {
-        type: 'bar',
         data: [666, 78, 88, 600],
         itemStyle: {
           shortLength: '70%'

@@ -27,7 +27,6 @@ const App = () => {
     series: [
       {
         name: 'Line 1',
-        type: 'line',
         stack: 'sign',
         smooth: true,
         lineStyle: { width: 0 },
@@ -43,7 +42,6 @@ const App = () => {
       },
       {
         name: 'Line 2',
-        type: 'line',
         stack: 'sign',
         smooth: true,
         lineStyle: { width: 0 },
@@ -59,7 +57,6 @@ const App = () => {
       },
       {
         name: 'Line 3',
-        type: 'line',
         stack: 'sign',
         smooth: true,
         lineStyle: { width: 0 },
@@ -75,7 +72,6 @@ const App = () => {
       },
       {
         name: 'Line 4',
-        type: 'line',
         stack: 'sign',
         smooth: true,
         lineStyle: { width: 0 },
@@ -91,7 +87,6 @@ const App = () => {
       },
       {
         name: 'Line 5',
-        type: 'line',
         stack: 'sign',
         smooth: true,
         lineStyle: { width: 0 },
