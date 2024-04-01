@@ -1,4 +1,4 @@
-import { cloneElement, useLayoutEffect, useRef } from 'react'
+import { cloneElement, useEffect, useLayoutEffect, useRef } from 'react'
 
 export const useChildren = children => {
   const childRef = useRef([])
@@ -64,4 +64,16 @@ export const useBindEvent = (props, shapeInstance) => {
       }
     }
   })
+}
+
+export const useResizeObserver = (containerRef, cb) => {
+  useEffect(() => {
+    const ob = new ResizeObserver(cb)
+
+    ob.observe(containerRef.current)
+
+    return () => {
+      ob.disconnect()
+    }
+  }, [])
 }

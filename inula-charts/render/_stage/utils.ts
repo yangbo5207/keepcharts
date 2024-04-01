@@ -3,8 +3,7 @@ import { EventParameter, EventType, OnEventType, dpr, supportBubblesEventType } 
 import { IShape } from '../type'
 import { isStage } from '../utils'
 
-function createCanvas(containerWidth: number, containerHeight: number) {
-  const canvasElement = document.createElement('canvas')
+export function setCanvasStyle(canvasElement, containerWidth, containerHeight) {
   const canvasWidth = containerWidth * dpr
   const canvasHeight = containerHeight * dpr
 
@@ -12,6 +11,18 @@ function createCanvas(containerWidth: number, containerHeight: number) {
   canvasElement.height = canvasHeight
   canvasElement.style.width = '100%'
   canvasElement.style.height = '100%'
+}
+
+function createCanvas(containerWidth: number, containerHeight: number) {
+  const canvasElement = document.createElement('canvas')
+
+  const ctx = updateCanvas(canvasElement, containerWidth, containerHeight)
+
+  return { canvasElement, ctx }
+}
+
+export function updateCanvas(canvasElement, containerWidth, containerHeight) {
+  setCanvasStyle(canvasElement, containerWidth, containerHeight)
 
   const ctx = canvasElement.getContext('2d')
 
@@ -19,7 +30,7 @@ function createCanvas(containerWidth: number, containerHeight: number) {
   ctx.textBaseline = 'top'
   ctx.font = `${14}px 微软雅黑`
 
-  return { canvasElement, ctx }
+  return ctx
 }
 
 export function initStage(canvasContainer: HTMLElement) {

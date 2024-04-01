@@ -11,7 +11,7 @@ export interface Children {
 
 export interface ChartProps {
   option
-  width?: number
+  width?: number | string
   height?: number
   containerStyle?: CSSProperties
 }

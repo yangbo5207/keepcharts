@@ -2,7 +2,7 @@ import colorAlpha from 'color-alpha'
 
 import Draggable from '../Draggable'
 import { EventParameter, Handler, eventStageList } from '../constant'
-import { findToRoot, initStage, triggerEventHandlers } from './utils'
+import { findToRoot, initStage, setCanvasStyle, triggerEventHandlers, updateCanvas } from './utils'
 import { resetSchedulerCount } from './scheduler'
 import { findHover } from './findHover'
 import { mountStage } from './renderUi'
@@ -26,7 +26,11 @@ export class Stage extends AbsEvent {
     }
   }
 
+  option: IOption
+
   mount(option: IOption, isHand = false) {
+    this.option = option
+
     const { container } = option
     const stage = initStage(container)
 
@@ -38,6 +42,13 @@ export class Stage extends AbsEvent {
     }
 
     this.addStageEventListener()
+  }
+
+  refreshDraw() {
+    const ctx = updateCanvas(this.canvasElement, this.option.container.offsetWidth, this.option.container.offsetHeight)
+    this.ctx = ctx
+
+    this.renderStage(true)
   }
 
   type: IShapeType = 'Stage'
@@ -97,7 +108,12 @@ export class Stage extends AbsEvent {
   private isAsyncRenderTask = false
 
   // 调度层 - 收集多次任务指令
-  renderStage() {
+  renderStage(sync?: boolean) {
+    if (sync) {
+      drawStageShapes(this)
+      return
+    }
+
     if (this.isAsyncRenderTask) {
       return
     }

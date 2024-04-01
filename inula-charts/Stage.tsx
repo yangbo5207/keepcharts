@@ -1,10 +1,10 @@
 import React, { CSSProperties, useRef, useLayoutEffect, createContext, useState, useEffect } from 'react'
 import { Group as _Group, Rect as _Rect, Stage as _Stage } from './render'
-import { useChildren } from './_hooks'
+import { useChildren, useResizeObserver } from './_hooks'
 
 interface StageProps extends CSSProperties {
   children?
-  width?: number
+  width?: number | string
   height?: number
   border?: string
   background?: string
@@ -12,7 +12,7 @@ interface StageProps extends CSSProperties {
 }
 
 const defaultProps: StageProps = {
-  width: 600,
+  width: '100%',
   height: 400,
   background: '#fff',
   margin: '0 auto'
@@ -30,6 +30,8 @@ export const Stage = (props: StageProps) => {
   useLayoutEffect(() => {
     stageRef.current.mount({ container: containerRef.current as HTMLDivElement }, true)
   }, [])
+
+  useResizeObserver(containerRef, () => stageRef.current.refreshDraw())
 
   return (
     <Context.Provider value={stageRef.current}>

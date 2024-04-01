@@ -219,6 +219,11 @@ export class ChartRoot {
       fn()
     })
   }
+
+  refreshDraw() {
+    this.stage.refreshDraw()
+    this.setOption(this.userOption)
+  }
 }
 
 function handleSeries(series: ICharts.series[]): ICharts.series[] {
