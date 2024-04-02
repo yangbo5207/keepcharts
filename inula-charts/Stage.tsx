@@ -1,6 +1,6 @@
 import React, { CSSProperties, useRef, useLayoutEffect, createContext, useState, useEffect } from 'react'
 import { Group as _Group, Rect as _Rect, Stage as _Stage } from './render'
-import { useChildren, useResizeObserver } from './_hooks'
+import {  useResizeObserver } from './_hooks'
 
 interface StageProps extends CSSProperties {
   children?
@@ -25,7 +25,6 @@ export const Stage = (props: StageProps) => {
 
   const containerRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<_Stage>(new _Stage())
-  const [newChild, shape] = useChildren(props.children)
 
   useLayoutEffect(() => {
     stageRef.current.mount({ container: containerRef.current as HTMLDivElement }, true)
@@ -37,7 +36,7 @@ export const Stage = (props: StageProps) => {
     <Context.Provider value={stageRef.current}>
       <div ref={containerRef} style={mergeProps}></div>
 
-      {newChild}
+      {props.children}
     </Context.Provider>
   )
 }

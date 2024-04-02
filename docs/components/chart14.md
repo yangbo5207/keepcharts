@@ -225,7 +225,7 @@ const App = () => {
     ]
   }
 
-  return <KLineChart option={拖动K线图} width={750} height={500} containerStyle={{ border: '1px solid #eee' }} />
+  return <KLineChart option={拖动K线图} containerStyle={{ border: '1px solid #eee' }} />
 }
 
 export default App

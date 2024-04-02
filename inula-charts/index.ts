@@ -17,3 +17,5 @@ export * from './LineChart'
 export * from './KLineChart'
 export * from './BarChart'
 export * from './PieChart'
+
+export * from './render/animate'

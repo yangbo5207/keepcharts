@@ -1,6 +1,6 @@
 import React, { useRef, useLayoutEffect, useImperativeHandle, forwardRef, useContext } from 'react'
 import { Group as _Group, Rect as _Rect, Stage as _Stage } from './render'
-import { useBindEvent, useChildren, usePropertyChange } from './_hooks'
+import { useBindEvent, usePropertyChange } from './_hooks'
 import { AnimationConfig, Children } from './type'
 
 import { Context } from './Stage'
@@ -9,12 +9,6 @@ type GroupProps = _Group['data'] & AnimationConfig & Children
 export const Group = forwardRef<_Group, GroupProps>((props, ref) => {
   const groupRef = useRef(new _Group(props))
   useImperativeHandle(ref, () => groupRef.current)
-
-  const [newChild, shape] = useChildren(props.children)
-
-  // useLayoutEffect(() => {
-  //   groupRef.current.append(shape)
-  // }, [])
 
   useBindEvent(props, groupRef.current)
 
@@ -47,5 +41,5 @@ export const Group = forwardRef<_Group, GroupProps>((props, ref) => {
     }
   }, [])
 
-  return <Context.Provider value={groupRef.current}>{newChild}</Context.Provider>
+  return <Context.Provider value={groupRef.current}>{props.children}</Context.Provider>
 })

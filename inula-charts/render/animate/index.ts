@@ -11,10 +11,11 @@ export type AnimateCartoonConfig = {
   additive?: boolean
   setToFinal?: boolean
   easing?: Easing
+  iterationCount?: number // Infinity
 }
 export * from './utils'
 
-const defaultCfg: AnimateCartoonConfig = { duration: 1000, easing: 'linear' }
+const defaultCfg: AnimateCartoonConfig = { duration: 1000, easing: 'linear', iterationCount: 1 }
 export class Animator {
   constructor(startProp = {}, targetProp = {}, cfg: AnimateCartoonConfig = {}) {
     this.startProp = startProp
@@ -30,18 +31,24 @@ export class Animator {
 
   rafTimer: number
 
-  start() {
-    let startTime: number
+  startTime: number
 
-    const { duration, easing, during } = this.cfg
+  forward = true // 正向动画
+
+  start() {
+    const { duration, easing, during, iterationCount } = this.cfg
     const keys = Object.keys(this.targetProp)
 
     const rafCb = (timestamp: number) => {
-      if (!startTime) {
-        startTime = timestamp
+      if (!this.startTime) {
+        this.startTime = timestamp
       }
 
-      const elapsedTimeRatio = easingFuncs[easing](Math.min((timestamp - startTime) / duration, 1))
+      let elapsedTimeRatio = easingFuncs[easing](Math.min((timestamp - this.startTime) / duration, 1))
+
+      if (this.forward === false) {
+        elapsedTimeRatio = 1 - elapsedTimeRatio
+      }
 
       const currentProp = {}
       keys.forEach(propKey => {
@@ -66,12 +73,21 @@ export class Animator {
         during(elapsedTimeRatio, currentProp)
       }
 
-      if (elapsedTimeRatio < 1) {
+      const nextCondition = this.forward ? elapsedTimeRatio < 1 : 0 < elapsedTimeRatio
+      if (nextCondition) {
         this.rafTimer = requestAnimationFrame(rafCb)
       }
 
-      if (elapsedTimeRatio === 1) {
-        this.onDone()
+      const endCondition = this.forward ? elapsedTimeRatio === 1 : elapsedTimeRatio === 0
+
+      if (endCondition) {
+        if (iterationCount === Infinity) {
+          this.forward = !this.forward
+          this.startTime = undefined
+          this.start()
+        } else {
+          this.onDone()
+        }
       }
     }
 

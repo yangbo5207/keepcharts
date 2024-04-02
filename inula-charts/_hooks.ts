@@ -1,6 +1,6 @@
 import { cloneElement, useEffect, useLayoutEffect, useRef } from 'react'
 
-export const useChildren = children => {
+const useChildren = children => {
   const childRef = useRef([])
 
   const childrenList = []

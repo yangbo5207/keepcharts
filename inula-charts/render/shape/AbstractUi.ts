@@ -3,7 +3,8 @@ import { Animator, AnimateCartoonConfig } from '../animate'
 import AbsEvent, { EventOpt } from '../AbsEvent'
 import { schedulerTask } from '../_stage/scheduler'
 import { ICursor, IShape, IShapeType } from '../type'
-import { createRectPath2D, drawCircle, setCtxStyleProp } from '../renderer/canvas'
+import { setCtxStyleProp } from '../renderer/canvas'
+import { createRectPath2D, setCirclePath2D } from '../renderer/canvas/setPath2D'
 import { clipRect } from '../utils'
 
 export interface AbstractUiData extends EventOpt {
@@ -54,7 +55,8 @@ export const defaultAbsData: AbstractUiData = {
   lineJoin: 'miter',
   lineDash: [],
   pointerEvents: 'all',
-  transform: [1, 0, 0, 1, 0, 0]
+  transform: [1, 0, 0, 1, 0, 0],
+  zIndex:0
 }
 
 export const combineDefaultData = (shapeData, defaultShapeData) => {
@@ -157,7 +159,7 @@ export abstract class AbstractUi<T = {}> extends AbsEvent {
 
       correctSortedShapes.forEach(item => {
         setCtxStyleProp(ctx, item)
-        drawCircle(ctx, item as any)
+        setCirclePath2D(item)
       })
     })
   }

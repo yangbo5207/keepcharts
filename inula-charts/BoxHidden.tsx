@@ -1,6 +1,6 @@
 import React, { useImperativeHandle, forwardRef, useRef, useLayoutEffect, useContext } from 'react'
 import { BoxHidden as _BoxHidden } from './render'
-import { useBindEvent, useChildren, usePropertyChange } from './_hooks'
+import { useBindEvent, usePropertyChange } from './_hooks'
 import { AnimationConfig, Children } from './type'
 import { Context } from './Stage'
 
@@ -14,12 +14,6 @@ export const BoxHidden = forwardRef<_BoxHidden, BoxHiddenProps>((props, ref) => 
   const bh = useRef(new _BoxHidden(mergeProps))
 
   useImperativeHandle(ref, () => bh.current)
-
-  const [newChild, shape] = useChildren(mergeProps.children)
-
-  useLayoutEffect(() => {
-    bh.current.append(shape)
-  }, [])
 
   usePropertyChange(mergeProps, 'width', bh.current)
   usePropertyChange(mergeProps, 'height', bh.current)
@@ -66,5 +60,5 @@ export const BoxHidden = forwardRef<_BoxHidden, BoxHiddenProps>((props, ref) => 
     }
   }, [])
 
-  return <>{newChild}</>
+  return <Context.Provider value={bh.current}>{props.children}</Context.Provider>
 })

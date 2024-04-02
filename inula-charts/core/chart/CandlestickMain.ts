@@ -162,13 +162,13 @@ class CandlestickMain extends _Chart<ICharts.CandlestickSeries> {
     <div style="${style.row}">
       <div style="${style.tagSign(color)}"></div> 
       <div>top</div>
-      <div style="${style.value}">${lowest}</div>
+      <div style="${style.value}">${highest}</div>
     </div>
 
     <div style="${style.row}">
       <div style="${style.tagSign(color)}"></div> 
       <div>bottom</div>
-      <div style="${style.value}">${highest}</div>
+      <div style="${style.value}">${lowest}</div>
     </div>
 `
   }

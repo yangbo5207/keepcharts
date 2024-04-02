@@ -56,11 +56,95 @@ export class ChartRoot {
       }
     }
 
+    this.stage.canvasElement.onwheel = evt => {
+      this.onwheel(evt)
+    }
+
+    this.stage.onmousedown = evt => {
+      this.onmousedown(evt)
+    }
+
     this.stage.onmouseleave = () => {
       isInner = false
       this.tooltip?.hide()
       this.assistLine?.setVisible(false)
     }
+  }
+
+  private onwheel(evt: WheelEvent) {
+    if (!hasDataZoom(this.userOption) || !this.isInnerCartesian2dRect(evt.offsetX, evt.offsetY)) {
+      return
+    }
+
+    evt.preventDefault()
+
+    const curRangeRatio = { ...this.dataZoom.rangeRatio }
+
+    const dis = 0.01
+    if (evt.deltaY > 0) {
+      curRangeRatio.startRatio = Math.min(curRangeRatio.startRatio + dis, curRangeRatio.endRatio)
+      curRangeRatio.endRatio = Math.max(curRangeRatio.endRatio - dis, curRangeRatio.startRatio)
+    } else {
+      curRangeRatio.startRatio = Math.max(curRangeRatio.startRatio - dis, 0)
+      curRangeRatio.endRatio = Math.min(curRangeRatio.endRatio + dis, 1)
+    }
+
+    this._range = curRangeRatio
+    this.setOption(this.userOption, curRangeRatio)
+  }
+
+  private onmousedown(evt) {
+    if (!this.coordinateSystem.hasCartesian2d || !this.isInnerCartesian2dRect(evt.x, evt.y)) {
+      return
+    }
+
+    let mousedownOffsetX = evt.nativeEvent.offsetX
+
+    const canvasElementRect = this.stage.canvasElement.getBoundingClientRect()
+
+    const handleDocumentMousemove = (evt: MouseEvent) => {
+      evt.preventDefault()
+
+      const { clientX } = evt
+      const offsetCanvasLeft = clientX - canvasElementRect.left
+      const offsetValue = offsetCanvasLeft - mousedownOffsetX
+
+      const { xAxisData } = this.coordinateSystem.cartesian2d.cartesian2dAxisData
+
+      // 如果移动距离不够
+      if (Math.abs(offsetValue) < xAxisData.axis.xAxisInterval) {
+        return
+      }
+      mousedownOffsetX = offsetCanvasLeft
+
+      const curRangeRatio = { ...this.dataZoom.rangeRatio }
+
+      const dis = 0.01
+      if (offsetValue > 0) {
+        curRangeRatio.startRatio -= dis
+        curRangeRatio.endRatio -= dis
+        if (curRangeRatio.startRatio < 0) {
+          return
+        }
+      } else {
+        curRangeRatio.startRatio += dis
+        curRangeRatio.endRatio += dis
+        if (curRangeRatio.endRatio > 1) {
+          return
+        }
+      }
+
+      this._range = curRangeRatio
+      this.setOption(this.userOption, curRangeRatio)
+    }
+
+    const handleDocumentMouseup = () => {
+      document.removeEventListener('mousemove', handleDocumentMousemove)
+      document.removeEventListener('mouseup', handleDocumentMouseup)
+    }
+
+    document.addEventListener('mousemove', handleDocumentMousemove)
+    document.addEventListener('mouseup', handleDocumentMouseup)
   }
 
   private isInnerCartesian2dRect(x: number, y: number) {
@@ -77,7 +161,7 @@ export class ChartRoot {
 
   wrapperContainer: HTMLDivElement
 
-  firstSetOption = true // 初始化还是更新
+  initialize = true // 初始化
 
   stage: Stage
 
@@ -143,8 +227,6 @@ export class ChartRoot {
 
     this.renderedElements = []
 
-    this.firstSetOption = false
-
     this.userOption = innerOption
 
     if (!rangeRatio) {
@@ -195,7 +277,7 @@ export class ChartRoot {
 
     {
       // 辅助刻度尺 仅对 二维的直角坐标系 有效
-      if (this.coordinateSystem.hasCartesian2d) {
+      if (this.initialize && this.coordinateSystem.hasCartesian2d) {
         this.assistLine = new AssistLine(this)
         this.assistLine.render()
         this.renderedElements.push(...this.assistLine.elements)
@@ -203,10 +285,14 @@ export class ChartRoot {
     }
 
     {
-      this.tooltip = new Tooltip(this)
+      if (this.initialize) {
+        this.tooltip = new Tooltip(this)
+      }
     }
 
     this.refreshChart()
+
+    this.initialize = false
   }
 
   refreshChart() {

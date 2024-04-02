@@ -62,7 +62,7 @@ export function triggerEventHandlers(
     if (supportBubblesEventType.includes(eventType)) {
       const _parent = parent as unknown as IShape
 
-      triggerEventHandlers(_parent, eventName, { ...eventParameter, target: _parent })
+      triggerEventHandlers(_parent, eventName, eventParameter)
     }
   }
 }

@@ -36,7 +36,7 @@ const App = () => {
     ]
   }
 
-  return <KLineChart option={K线图}  containerStyle={{ border: '1px solid #eee' }} />
+  return <KLineChart option={K线图} containerStyle={{ border: '1px solid #eee' }} />
 }
 
 export default App
