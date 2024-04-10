@@ -1,5 +1,5 @@
-import { Circle, Line, Text, Trapezoid } from '../../shape'
-import { clipRect, createLinePath2D, deg2rad, setCtxFontSize } from '../../utils'
+import { Circle, Group, Line, Text, Trapezoid } from '../../shape'
+import { clipRect, createLinePath2D, setCtxFontSize } from '../../utils'
 import { Stage } from '../../_stage'
 import { IShape } from '../../type'
 import { fillOrStroke, hasStroke } from './fillOrStroke'
@@ -20,87 +20,88 @@ export function drawStageShapes(stage: Stage) {
   const { ctx } = stage
   ctx.clearRect(0, 0, stage.canvasElement.width, stage.canvasElement.height)
 
-  drawSs(stage.children)
+  drawShapes(ctx, stage.children)
+}
 
-  function drawSs(list: IShape[]) {
-    list = sortChildren(list)
+export function drawShapes(ctx, list: IShape[]) {
+  list = sortChildren(list)
 
-    list.forEach(elementItem => {
-      const { data } = elementItem
+  list.forEach(elementItem => {
+    const { data } = elementItem
 
-      ctx.beginPath()
+    ctx.beginPath()
 
-      setCtxStyleProp(ctx, elementItem)
+    setCtxStyleProp(ctx, elementItem)
 
-      switch (elementItem.type) {
-        case 'Circle': {
-          setCirclePath2D(elementItem as Circle)
-          fillOrStroke(ctx, elementItem)
-          break
-        }
-        case 'Trapezoid': {
-          setTrapezoidPath2D(elementItem as Trapezoid)
-          fillOrStroke(ctx, elementItem)
-          break
-        }
-        case 'Line': {
-          const { closed, path2D } = data as Line['data']
-
-          // 调用 attr() 方法后,  需重新计算 path2D, 且一定会有 bug, 需要优化
-          elementItem.path2D = path2D ? path2D : createLinePath2D(data)
-
-          if (hasStroke(data.lineWidth, data.strokeStyle)) {
-            ctx.stroke(elementItem.path2D)
-          }
-
-          if (closed) {
-            ctx.fill(elementItem.path2D)
-          }
-          break
-        }
-        case 'Rect': {
-          setRectPath2D(elementItem)
-          fillOrStroke(ctx, elementItem)
-
-          break
-        }
-        case 'Group': {
-          drawSs(elementItem.children)
-          break
-        }
-        case 'BoxHidden': {
-          setRectPath2D(elementItem)
-
-          clipRect(ctx, elementItem.path2D, () => {
-            fillOrStroke(ctx, elementItem)
-            drawSs(elementItem.children)
-          })
-
-          break
-        }
-        case 'Text': {
-          const { x, y, content, fontSize, textAlign = 'left', textBaseline } = data as Text['data']
-
-          setCtxFontSize(ctx, fontSize)
-
-          ctx.textBaseline = textBaseline
-          ctx.textAlign = textAlign
-          ctx.fillText(content, x, y)
-          break
-        }
-
-        default:
-          console.log(elementItem.type, '该图形 暂未实现')
-          break
+    switch (elementItem.type) {
+      case 'Circle': {
+        setCirclePath2D(elementItem as Circle)
+        fillOrStroke(ctx, elementItem)
+        break
       }
-    })
-  }
+      case 'Trapezoid': {
+        setTrapezoidPath2D(elementItem as Trapezoid)
+        fillOrStroke(ctx, elementItem)
+        break
+      }
+      case 'Line': {
+        const { closed, path2D } = data as Line['data']
+
+        // 调用 attr() 方法后,  需重新计算 path2D, 且一定会有 bug, 需要优化
+        elementItem.path2D = path2D ? path2D : createLinePath2D(data)
+
+        if (hasStroke(data.lineWidth, data.strokeStyle)) {
+          ctx.stroke(elementItem.path2D)
+        }
+
+        if (closed) {
+          ctx.fill(elementItem.path2D)
+        }
+        break
+      }
+      case 'Rect': {
+        setRectPath2D(elementItem)
+        fillOrStroke(ctx, elementItem)
+
+        break
+      }
+      case 'Group': {
+        drawShapes(ctx, (elementItem as Group).children)
+        break
+      }
+      case 'BoxHidden': {
+        setRectPath2D(elementItem)
+
+        clipRect(ctx, elementItem.path2D, () => {
+          fillOrStroke(ctx, elementItem)
+          drawShapes(ctx, (elementItem as Group).children)
+        })
+
+        break
+      }
+      case 'Text': {
+        const { x, y, content, fontSize, textAlign = 'left', textBaseline } = data as Text['data']
+
+        setCtxFontSize(ctx, fontSize)
+
+        ctx.textBaseline = textBaseline
+        ctx.textAlign = textAlign
+        ctx.fillText(content, x, y)
+        break
+      }
+
+      default:
+        console.log(elementItem.type, '该图形 暂未实现')
+        break
+    }
+  })
 }
 
 export function setCtxStyleProp(ctx: CanvasRenderingContext2D, elementItem: IShape) {
   const { data } = elementItem
   const { lineWidth, lineCap, lineJoin, strokeStyle, fillStyle, opacity, lineDash } = data
   const { shadowBlur, shadowColor, shadowOffsetX, shadowOffsetY } = data
+  const { transform, scale, translate } = data
 
   ctx.lineWidth = lineWidth
   ctx.lineCap = lineCap
@@ -117,6 +118,18 @@ export function setCtxStyleProp(ctx: CanvasRenderingContext2D, elementItem: ISha
   ctx.shadowOffsetY = shadowOffsetY
   ctx.shadowColor = shadowColor
   ctx.shadowBlur = shadowBlur
+
+  if (transform) {
+    ctx.setTransform(...(transform as any))
+  }
+
+  if (scale) {
+    ctx.scale(scale.x, scale.y)
+  }
+
+  if (translate) {
+    ctx.translate(translate.x, translate.y)
+  }
 }
 
 export function sortByZIndex(root) {

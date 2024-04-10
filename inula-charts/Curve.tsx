@@ -1,24 +1,29 @@
-import { forwardRef, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react'
-import { Line, LineProps } from './index'
+import {
+  forwardRef,
+  useImperativeHandle,
+  useLayoutEffect,
+  useRef,
+} from 'react';
+import { Line, LineProps } from './index';
 
 export const Curve = forwardRef((props: LineProps, ref) => {
-  const shapeRef = useRef(null)
+  const shapeRef = useRef(null);
 
-  useImperativeHandle(ref, () => shapeRef.current)
+  useImperativeHandle(ref, () => shapeRef.current);
 
   useLayoutEffect(() => {
     return () => {
-      shapeRef.current.remove()
-    }
-  }, [])
+      shapeRef.current.remove();
+    };
+  }, []);
 
   return (
     <Line
       smooth
-      ref={el => {
-        shapeRef.current = el
+      ref={(el) => {
+        shapeRef.current = el;
       }}
       {...props}
     />
-  )
-})
+  );
+});

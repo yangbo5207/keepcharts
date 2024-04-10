@@ -6,7 +6,7 @@ nav:
 toc: content
 ---
 
-# 15000 个元素
+# 10000 个元素
 
 `inula-charts` 可以轻松支持 10000+ 元素同时动画的流畅执行。性能表现优异。
 
@@ -17,7 +17,7 @@ toc: content
 import { useEffect, useRef, useState } from 'react';
 import { Rect, Stage, Animator } from 'inula-charts';
 
-const rectCount = 15000;
+const rectCount = 4000;
 
 const stageWidth = 700;
 const stageHeight = 10700;
@@ -98,6 +98,7 @@ const App = () => {
           width={item.width}
           height={item.height}
           fillStyle="pink"
+          draggable
         />
       ))}
     </Stage>

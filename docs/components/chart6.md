@@ -103,7 +103,7 @@ const App = () => {
     ]
   }
 
-  return <LineChart option={渐变图} width={750} height={500} containerStyle={{ border: '1px solid #eee' }} />
+  return <LineChart option={渐变图} containerStyle={{ border: '1px solid #eee' }} />
 }
 
 export default App

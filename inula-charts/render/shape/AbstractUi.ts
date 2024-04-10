@@ -33,6 +33,9 @@ export interface AbstractUiData extends EventOpt {
   pointerEvents?: 'none' | 'all' // 是否响应鼠标事件 默认为 true
 
   transform?: number[]
+  scale?: { x: number; y: number }
+  translate?: { x: number; y: number }
+  // rotate?: number
 
   extraData?: any // 需要优化
 }
@@ -55,8 +58,8 @@ export const defaultAbsData: AbstractUiData = {
   lineJoin: 'miter',
   lineDash: [],
   pointerEvents: 'all',
-  transform: [1, 0, 0, 1, 0, 0],
-  zIndex:0
+  // transform: [1, 0, 0, 1, 0, 0],
+  zIndex: 0
 }
 
 export const combineDefaultData = (shapeData, defaultShapeData) => {
@@ -170,7 +173,10 @@ export abstract class AbstractUi<T = {}> extends AbsEvent {
 
   remove() {
     const parentChildren = this.parent.children as IShape[]
-    parentChildren.splice(parentChildren.indexOf(this), 1)
+    const index = parentChildren.indexOf(this)
+    if (index !== -1) {
+      parentChildren.splice(index, 1)
+    }
 
     this.stage.renderStage()
   }

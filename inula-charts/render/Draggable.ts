@@ -12,7 +12,7 @@ export default class Draggable {
   dragStart(eventParameter: EventParameter, canvasElementRect: DOMRect) {
     let draggedTarget = eventParameter.target
 
-    while (draggedTarget && !draggedTarget.data.draggable) {
+    while (draggedTarget && draggedTarget.data.draggable == undefined) {
       const parent = draggedTarget.parent as unknown as IShape
       if (isStage(parent)) {
         break
@@ -29,14 +29,14 @@ export default class Draggable {
     const onDocumentMousemove = (evt: MouseEvent) => {
       evt.preventDefault()
 
+      if (!draggedTarget.data.draggable) {
+        return
+      }
+
       this.dragging = true
 
       const x = evt.clientX - canvasElementRect.left
       const y = evt.clientY - canvasElementRect.top
-
-      if (!draggedTarget.data.draggable) {
-        return
-      }
 
       const dx = evt.clientX - this.prevClientX
       const dy = evt.clientY - this.prevClientY

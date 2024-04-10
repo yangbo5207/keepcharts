@@ -7,7 +7,7 @@ import { resetSchedulerCount } from './scheduler'
 import { findHover } from './findHover'
 import { mountStage } from './renderUi'
 import { ICursor, IShape, IShapeType } from '../type'
-import { drawStageShapes } from '../renderer/canvas'
+import { drawShapes, drawStageShapes } from '../renderer/canvas'
 import Rect from '../shape/Rect'
 import { BoundingRect } from '../shape/AbstractUi'
 import { isStage } from '../utils'
@@ -105,6 +105,10 @@ export class Stage extends AbsEvent {
     this.renderStage()
   }
 
+  appendIncrement(shape: IShape) {
+    drawShapes(this.ctx, [shape])
+  }
+
   private isAsyncRenderTask = false
 
   // 调度层 - 收集多次任务指令
@@ -148,6 +152,10 @@ export class Stage extends AbsEvent {
 
     this.canvasElement.onmouseleave = evt => {
       if (this.hoveredStack.length) {
+        if (evt.buttons !== 0) {
+          return
+        }
+
         this.hoveredStack.toReversed().forEach(elementItem => {
           const eventParameter: EventParameter = { target: elementItem, x: evt.offsetX, y: evt.offsetY }
           triggerEventHandlers(elementItem, 'onmouseleave', eventParameter)
