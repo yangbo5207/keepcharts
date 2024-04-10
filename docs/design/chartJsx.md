@@ -25,6 +25,7 @@ import {
   useMemo,
 } from 'react';
 import rmstCharts from 'inula-charts/core';
+import { useResizeObserver } from 'inula-charts/_hooks';
 
 const Context = createContext(null);
 
@@ -97,11 +98,13 @@ function ChartStage(props) {
     return { updateXAxisData, updateLineMainData };
   }, []);
 
+  useResizeObserver(containerRef, () => insRef.current.refreshDraw());
+
   return (
     <Context.Provider value={value}>
       <div
         ref={containerRef}
-        style={{ width: 750, height: 500, border: '1px solid #aaa' }}
+        style={{ width: '100%', height: 500, border: '1px solid #aaa' }}
       ></div>
 
       {props.children}

@@ -20,6 +20,7 @@ import {
   Line,
   calcLineLength,
 } from 'inula-charts/render';
+import { useResizeObserver } from 'inula-charts/_hooks';
 
 class RectWithCircle {
   constructor(rectData: Rect['data']) {
@@ -168,9 +169,11 @@ class RectWithCircle {
 
 function App() {
   const canvasRef = useRef();
+  const stageRef = useRef();
 
   useEffect(() => {
     const stage = new Stage({ container: canvasRef.current });
+    stageRef.current = stage;
 
     const rectWithCircles_1 = new RectWithCircle({
       x: 100,
@@ -265,7 +268,11 @@ function App() {
     };
   }, []);
 
-  return <div ref={canvasRef} style={{ width: 700, height: 400 }}></div>;
+  useResizeObserver(canvasRef, () => {
+    stageRef.current.refreshDraw();
+  });
+
+  return <div ref={canvasRef} style={{ width: '100%', height: 400 }}></div>;
 }
 
 export default App;
